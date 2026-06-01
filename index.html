@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fridge Hero - AI Recipe Generator</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <header class="app-header">
+            <div class="logo">🍳 Fridge Hero</div>
+            <h1>What's in your fridge?</h1>
+            <p class="subtitle">Enter 3 random ingredients, and our AI chef will whip up a custom recipe just for you.</p>
+        </header>
+
+        <main class="app-content">
+            <section class="form-section">
+                <form id="recipe-form">
+                    <div class="input-group">
+                        <label for="ing1">Ingredient 1</label>
+                        <input type="text" id="ing1" placeholder="e.g., Bread" required autocomplete="off">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="ing2">Ingredient 2</label>
+                        <input type="text" id="ing2" placeholder="e.g., Eggs" required autocomplete="off">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="ing3">Ingredient 3</label>
+                        <input type="text" id="ing3" placeholder="e.g., Peanut Butter" required autocomplete="off">
+                    </div>
+
+                    <button type="submit" id="submit-btn">
+                        <span class="btn-text">Cook Magic ✨</span>
+                    </button>
+                </form>
+            </section>
+
+            <section class="output-section">
+                <div id="loading-state" class="hidden">
+                    <div class="spinner"></div>
+                    <p>Cooking something magical...</p>
+                </div>
+
+                <div id="error-state" class="hidden">
+                    <p id="error-message">Something went wrong. Please try again.</p>
+                </div>
+
+                <article id="recipe-card" class="recipe-card hidden">
+                    <span class="card-badge">Chef's Recommendation</span>
+                    <h2 id="recipe-title" class="recipe-title">Dish Name</h2>
+                    <p id="recipe-desc" class="recipe-desc">Short description of the meal goes here.</p>
+                    
+                    <hr class="divider">
+                    
+                    <h3>Steps to Prepare</h3>
+                    <ol id="recipe-steps" class="recipe-steps">
+                        </ol>
+                    
+                    <div class="serving-box">
+                        <strong>💡 Serving Tip:</strong>
+                        <span id="recipe-tip">Plating or flavor upgrade advice.</span>
+                    </div>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
