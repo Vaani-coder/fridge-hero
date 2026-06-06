@@ -61,21 +61,28 @@ try {
         if (!response.ok) throw new Error("Failed to fetch from API");
 
         const data = await response.json();
+        console.log("Raw AI Response:", data); // This lets us peek at what the AI actually said!
         
-        // Safer way to open the AI's envelope
         let textResponse = "";
         
+        // Grab the text from the AI
         if (data.candidates && data.candidates[0].content.parts[0].text) {
             textResponse = data.candidates[0].content.parts[0].text;
-        } else if (data.body) {
-             // Netlify sometimes strings the body twice
-            let parsedBody = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
-            textResponse = parsedBody.candidates[0].content.parts[0].text;
+        } else {
+            throw new Error("AI returned an empty or weird response.");
         }
 
-        // Clean up the text and turn it into a JavaScript object
-        textResponse = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
-        const recipeData = JSON.parse(textResponse);
+        // BULLETPROOF JSON EXTRACTOR: Find the first '{' and the last '}'
+        const firstBrace = textResponse.indexOf('{');
+        const lastBrace = textResponse.lastIndexOf('}');
+        
+        if (firstBrace === -1 || lastBrace === -1) {
+            throw new Error("AI did not return valid JSON format.");
+        }
+        
+        // Chop off any conversational text the AI added
+        const cleanJsonString = textResponse.substring(firstBrace, lastBrace + 1);
+        const recipeData = JSON.parse(cleanJsonString);
 
         // Put the AI data into your beautiful HTML elements
         recipeTitle.textContent = recipeData.dishName;
