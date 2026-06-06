@@ -51,7 +51,7 @@ async function handleCookMagic(event) {
         }
     `;
 
-    try {
+try {
         const response = await fetch('/.netlify/functions/generate', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -62,7 +62,18 @@ async function handleCookMagic(event) {
 
         const data = await response.json();
         
-        let textResponse = data.candidates[0].content.parts[0].text;
+        // Safer way to open the AI's envelope
+        let textResponse = "";
+        
+        if (data.candidates && data.candidates[0].content.parts[0].text) {
+            textResponse = data.candidates[0].content.parts[0].text;
+        } else if (data.body) {
+             // Netlify sometimes strings the body twice
+            let parsedBody = typeof data.body === 'string' ? JSON.parse(data.body) : data.body;
+            textResponse = parsedBody.candidates[0].content.parts[0].text;
+        }
+
+        // Clean up the text and turn it into a JavaScript object
         textResponse = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
         const recipeData = JSON.parse(textResponse);
 
